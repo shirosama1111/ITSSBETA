@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f8fb" />
+    <meta name="description" content="Ước tính số lượt gửi xe còn lại và đặt mức dự phòng cho thẻ gửi xe HUST." />
+    <title>Thẻ gửi xe · HUST</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#home" aria-label="Thẻ gửi xe HUST, trang chủ">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19V5h7.5a4.5 4.5 0 0 1 0 9H9v5M9 10h3.5a.5.5 0 0 0 0-1H9" /></svg></span>
+          <span>HUST<span class="brand-dot">·</span>Parking</span>
+        </a>
+        <div class="topbar-right"><span class="local-badge"><span></span>Dữ liệu lưu trên thiết bị</span><button class="icon-button" id="reset-button" type="button" aria-label="Đặt lại dữ liệu" title="Đặt lại dữ liệu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4.7 9a7.5 7.5 0 0 1 12.6-2L20 12m-.7 3a7.5 7.5 0 0 1-12.6 2L4 12m0 0V7" /></svg></button></div>
+      </header>
+
+      <main id="home">
+        <section class="intro">
+          <div class="eyebrow"><span class="eyebrow-line"></span>TRỢ LÝ THẺ GỬI XE</div>
+          <h1>Biết trước thẻ còn<br class="mobile-break" /> <span class="text-gradient">bao nhiêu lượt.</span></h1>
+          <p>Ước tính thời gian sử dụng, đặt mức dự phòng và nhận nhắc nhở trước khi cần nạp thẻ.</p>
+        </section>
+
+        <section class="dashboard" aria-label="Tổng quan thẻ gửi xe">
+          <div class="panel form-panel">
+            <div class="panel-heading">
+              <div><div class="step-label"><span class="step-number">01</span> TỔNG QUAN THẺ <span class="jp">駐車カードの利用状況</span></div><h2>Thông tin thẻ</h2></div>
+              <span class="edit-indicator"><span></span>Đang cập nhật</span>
+            </div>
+            <form id="parking-form">
+              <div class="field-grid">
+                <label class="field field-wide" for="balance"><span class="field-title">Số tiền còn trong thẻ <span class="jp">残高</span></span><span class="input-wrap"><input id="balance" name="balance" type="number" min="0" step="1000" inputmode="numeric" placeholder="Ví dụ: 300000" required /><span class="input-suffix">₫</span></span><span class="field-hint">Số dư hiện tại sau lần nạp gần nhất</span></label>
+                <label class="field" for="fee"><span class="field-title">Phí mỗi lượt <span class="jp">1回あたりの料金</span></span><span class="input-wrap"><input id="fee" name="fee" type="number" min="1" step="500" inputmode="numeric" placeholder="Ví dụ: 5000" required /><span class="input-suffix">₫ / lượt</span></span></label>
+                <label class="field" for="weekly"><span class="field-title">Lượt gửi trung bình / tuần <span class="jp">週あたりの平均利用回数</span></span><span class="input-wrap"><input id="weekly" name="weekly" type="number" min="0.1" max="100" step="0.5" inputmode="decimal" placeholder="Ví dụ: 5" required /><span class="input-suffix">lượt</span></span></label>
+              </div>
+              <details class="schedule-details"><summary><span class="calendar-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4M16.5 3v4M4 10h16"/></svg></span><span>Thêm lịch gửi xe <span class="optional">Không bắt buộc</span><span class="jp">利用予定日（任意）</span></span><span class="summary-chevron">⌄</span></summary><div class="weekday-picker" aria-label="Chọn ngày thường gửi xe"><label><input type="checkbox" value="1"><span>T2</span></label><label><input type="checkbox" value="2"><span>T3</span></label><label><input type="checkbox" value="3"><span>T4</span></label><label><input type="checkbox" value="4"><span>T5</span></label><label><input type="checkbox" value="5"><span>T6</span></label><label><input type="checkbox" value="6"><span>T7</span></label><label><input type="checkbox" value="0"><span>CN</span></label></div><p class="schedule-note">Lịch giúp bạn hình dung ngày dự kiến hết lượt; phép tính vẫn dựa trên số lượt trung bình mỗi tuần.</p></details>
+              <button class="primary-button" type="submit"><span>Xem ước tính</span><span class="jp">推定を見る</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+            </form>
+          </div>
+
+          <aside class="results-column">
+            <section class="panel result-panel" id="estimate-card" aria-live="polite">
+              <div class="result-top"><div><div class="step-label blue-label"><span class="step-number">02</span> ƯỚC TÍNH <span class="jp">推定結果</span></div><h2>Số lượt còn lại</h2></div><span class="result-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18.5V5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5ZM8 8h8M8 12h8M8 16h4" /></svg></span></div>
+              <div class="empty-state" id="empty-state"><span class="empty-illustration"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="10" width="34" height="28" rx="5"/><path d="M16 10V7m16 3V7M7 19h34M17 27h14M17 32h8"/></svg></span><strong>Ước tính của bạn sẽ hiện ở đây</strong><span>Nhập thông tin thẻ rồi nhấn “Xem ước tính”.</span></div>
+              <div class="estimate-content" id="estimate-content" hidden>
+                <div class="estimate-number"><strong id="remaining-count">—</strong><span>lượt gửi xe</span></div>
+                <div class="estimate-divider"></div>
+                <div class="estimate-meta"><div><span class="meta-icon clock-icon">◷</span><span><small>Dùng được khoảng</small><strong id="remaining-time">—</strong></span></div><div><span class="meta-icon date-icon">⌁</span><span><small>Dự kiến hết lượt</small><strong id="expiry-date">—</strong></span></div></div>
+                <div class="balance-line"><span>Số dư ước tính</span><strong id="balance-display">—</strong></div>
+              </div>
+              <div class="notice-banner" id="notice-banner" hidden><span class="notice-symbol">!</span><span><strong id="notice-title">Sắp chạm mức dự phòng</strong><small id="notice-text">Cân nhắc nạp thêm tiền vào thẻ.</small></span></div>
+              <button class="text-button" id="edit-link" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>Sửa dữ liệu <span class="jp">入力データを修正</span></button>
+            </section>
+
+            <section class="panel reserve-panel">
+              <div class="reserve-heading"><div class="reserve-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3.8 7.5v9L12 21l8.2-4.5v-9L12 3Zm0 5v4m0 4h.01"/></svg></div><div><div class="step-label amber-label"><span class="step-number">03</span> MỨC DỰ PHÒNG <span class="jp">予備回数の設定</span></div><h2>Chuẩn bị trước</h2></div></div>
+              <p>Chọn số lượt bạn muốn luôn để dành. Ứng dụng sẽ nhắc khi số lượt còn lại gần chạm ngưỡng.</p>
+              <label class="reserve-field" for="reserve"><span>Luôn giữ lại ít nhất</span><span class="reserve-input-wrap"><input id="reserve" type="number" min="0" step="1" value="5" inputmode="numeric" /><span>lượt</span></span></label>
+              <div class="threshold-note"><span class="threshold-dot"></span><span>Cảnh báo ở mức <strong id="threshold-value">6 lượt</strong> trở xuống <span class="jp">予備回数 + 1 以下で警告</span></span></div>
+              <button class="secondary-button" id="save-reserve" type="button"><span>Lưu mức dự phòng</span><span class="jp">予備回数を保存</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+            </section>
+          </aside>
+        </section>
+
+        <section class="how-it-works"><div class="how-title"><span class="sparkle">✳</span><span>Đơn giản, riêng tư, chủ động.</span></div><div class="how-points"><div><span class="point-number">01</span><span>Nhập số dư và tần suất sử dụng</span></div><div><span class="point-number">02</span><span>Xem thời gian sử dụng dự kiến</span></div><div><span class="point-number">03</span><span>Nhận nhắc nhở đúng lúc</span></div></div></section>
+      </main>
+      <footer><span>© <span id="year"></span> HUST · Parking companion</span><span>Ứng dụng độc lập, không kết nối hệ thống thẻ HUST. <span class="jp">HUSTの駐車カードシステムとは連携しません。</span></span></footer>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
